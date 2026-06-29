@@ -1,0 +1,17 @@
+{
+  "version": 2,
+  "dgSpecHash": "u4nDWpR9y4g=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\emilis\\AppData\\Local\\Programs\\Lite XL\\C_sharp\\test_projects\\Ovi_project\\Ovi_project.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\emilis\\.nuget\\packages\\microsoft.dotnet.ilcompiler\\10.0.9\\microsoft.dotnet.ilcompiler.10.0.9.nupkg.sha512",
+    "C:\\Users\\emilis\\.nuget\\packages\\microsoft.net.illink.tasks\\10.0.9\\microsoft.net.illink.tasks.10.0.9.nupkg.sha512",
+    "C:\\Users\\emilis\\.nuget\\packages\\runtime.win-x64.microsoft.dotnet.ilcompiler\\10.0.9\\runtime.win-x64.microsoft.dotnet.ilcompiler.10.0.9.nupkg.sha512",
+    "C:\\Users\\emilis\\.nuget\\packages\\microsoft.netcore.app.runtime.win-x64\\10.0.9\\microsoft.netcore.app.runtime.win-x64.10.0.9.nupkg.sha512",
+    "C:\\Users\\emilis\\.nuget\\packages\\microsoft.windowsdesktop.app.runtime.win-x64\\10.0.9\\microsoft.windowsdesktop.app.runtime.win-x64.10.0.9.nupkg.sha512",
+    "C:\\Users\\emilis\\.nuget\\packages\\microsoft.aspnetcore.app.runtime.win-x64\\10.0.9\\microsoft.aspnetcore.app.runtime.win-x64.10.0.9.nupkg.sha512",
+    "C:\\Users\\emilis\\.nuget\\packages\\microsoft.netcore.app.runtime.nativeaot.win-x64\\10.0.9\\microsoft.netcore.app.runtime.nativeaot.win-x64.10.0.9.nupkg.sha512",
+    "C:\\Users\\emilis\\.nuget\\packages\\runtime.win-x64.microsoft.dotnet.ilcompiler\\10.0.9\\runtime.win-x64.microsoft.dotnet.ilcompiler.10.0.9.nupkg.sha512"
+  ],
+  "logs": []
+}
