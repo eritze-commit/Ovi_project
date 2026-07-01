@@ -1,3 +1,15 @@
-file text parser to instrucitons or something , 
-written in C# , file extensoion name ovi
+asmebly like language with virtual memory , 
+written in C# , file extensoion .ovi
+Ovi abreviation for Operator of Virtual Instructions
+
+255 bytes of memory 
+4 general purpose registers 1 byte each , A , B , C , D , 
+0 flag 
+
+language 
+
+
+add -   add (register name to add to) (constant or register)
+sub - 
+
 

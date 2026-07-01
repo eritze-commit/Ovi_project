@@ -5,18 +5,13 @@ public struct Ovi
     static void Main(string[] arguments) 
    
     {
-    byte[] Memory = new byte[1000];
+    byte[] Memory = new byte[255];
     int cur_exec_line = 0;
-    var registers = new Dictionary<string,Byte> 
-    {
-         ["A"] = 0,
-         ["B"] = 0,
-         ["C"] = 0,
-         ["D"] = 0,
-    };
+    bool zero_flag = false
     
     
     bool running = false;
+    bool entered_main = false;
         
         if (arguments.Length == 1 ) 
         {
@@ -45,9 +40,11 @@ public struct Ovi
                               
                                 foreach (string word in line_split) 
                                 {
-                                   
-                                    instructions[ins_Line][collum] = word;
-                                    //Console.WriteLine($"{instructions[ins_Line][collum]}");
+                                  // if (word != "")
+                                   //{
+                                        instructions[ins_Line][collum] = word;
+                                   // }
+                                    Console.WriteLine($"{instructions[ins_Line][collum]}");
                                     //Console.WriteLine($"{word}");
                                     collum += 1 ;
                                 }
@@ -58,6 +55,50 @@ public struct Ovi
                         {
                              Console.WriteLine($"\x1b[31mFailed to parse the file\x1b[0m {ex}");
                         }
+                        //Console.WriteLine($"[{string.Join(", ", instructions)}]");
+                        var registers = new Dictionary<string,Byte> 
+                        {
+                            ["A"] = 0,
+                            ["B"] = 0,
+                            ["C"] = 0,
+                            ["D"] = 0,
+                        };
+
+                        byte Value_Parser(string value, params string[] flags)
+                        {
+                            bool binary_byte = false;
+                            bool register = false ;
+                            bool number = false ;
+                            bool memory_adress ;
+                            foreach (string flag in flags )
+                            {
+                                switch(flag)
+                                {
+                                    case "bin":
+                                        binary_byte = true;
+                                        break;
+                                    case "reg":
+                                        register = true;
+                                        break;
+                                    case "num":
+                                        number = true;
+                                        break;
+                                    case "mem" :
+                                        memory_adress = true;
+                                        break;
+                                    
+                                }
+                            }
+                            try
+                            {
+                                
+                            }
+                            catch
+                            {
+                                Console.WriteLine($"\x1b[31mRUNTIME ERROR ! code failed on line {cur_exec_line + 1 }\x1b[0m");
+                                running = false;
+                            }
+                        }
                        
                        
                         Dictionary<string,Action> operations = new Dictionary<string,Action>()
@@ -66,18 +107,36 @@ public struct Ovi
                             ["add"] = () =>
                             {   
                                 try
-                                {
-                                    int register = int.Parse(instructions[cur_exec_line][1]);
+                                {    
+                                    if 
+                                    int left_value = int.Parse(instructions[cur_exec_line][1]);
                                     int right_value = int.Parse(instructions[cur_exec_line][2]);
-                                    int result = register + right_value;
-                                    Console.WriteLine($"ins exec, add : res - {result} ");
+                                    byte a = unchecked((byte)register);
+                                    byte b = unchecked((byte)right_value);
+                                    byte result = unchecked( (byte)( register + right_value) ) ;
+                                    Console.WriteLine($"Line {cur_exec_line + 1 }, ins exec, add : res - {result} ");
                                 }
                                 catch
                                 {
-                                    Console.WriteLine($"\x1b[31mRUNTIME ERROR ! code failed on line {cur_exec_line}\x1b[0m");
+                                    Console.WriteLine($"\x1b[31mRUNTIME ERROR ! code failed on line {cur_exec_line + 1 }\x1b[0m");
                                     running = false;
                                 }
                             },
+                             ["["] = () =>
+                             {
+                                Console.WriteLine($"Line {cur_exec_line + 1 }, ins exec, [ : entered_main - {true} ");
+                                entered_main = true;
+
+                             },
+                             ["]"] = () =>
+                             {
+                                Console.WriteLine($"Line {cur_exec_line + 1}, ins exec, ] : program end");
+                                entered_main = false;
+                                running = false;
+
+                             },
+                             
+                            
                         };
         
 
@@ -90,24 +149,41 @@ public struct Ovi
                              
                                 try
                                 {
-                               
-                                    operations[ instructions[cur_exec_line][0] ]();
+                                    
+                                    Console.WriteLine($"exec, line  {cur_exec_line + 1}");
+                                    if (operations.ContainsKey( instructions[cur_exec_line][0] ) )
+                                    {
+                                        operations[ instructions[cur_exec_line][0] ]();
+                                    }
+                                    
+                                    if (cur_exec_line < instructions.Length  )
+                                    {
+
+                                        cur_exec_line += 1;
+                                      
+                                    }
+                                    else
+                                    {
+                                        running = false;
+                                    
+                                    }
+                                    
                                 }
                                 catch
                                 {
                                  
-                                    Console.WriteLine($"\x1b[31mRUNTIME ERROR ! code failed on line {cur_exec_line}\x1b[0m");
-                                   
-                                    running = false;
+                                    Console.WriteLine($"\x1b[31mRUNTIME ERROR ! code failed on line {cur_exec_line + 1 }\x1b[0m");
+                                    
                                     
                                 }
                                 
-                                cur_exec_line += 1;
                             }
                         }
                        
                         Runtime();
+                       
                         Console.WriteLine("Program stopped running");
+                        Console.WriteLine($"program length {instructions.Length}");
                        
                         
                     }

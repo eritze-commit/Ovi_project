@@ -1,9 +1,15 @@
-add 1 2 
+[           
+add 1 2
+store A, 20
+add 15, 50
+store
 
-add 10 20
- 
-add 15 50
+        
 
-add 84 50
- 
+        
 
+
+
+add 255 43
+
+]
