@@ -9,7 +9,10 @@ Ovi abreviation for Operator of Virtual Instructions
 language 
 
 
-add -   add (register name to add to) (constant or register)
-sub - 
+add -   addision  (register name to add to), (constant or register 01000011)
+sub -  subtraction  (register name to subrtact to), (constant or register or Byte 01000011 )
+store - storing (memory adress  name to store  to), (constant or register or Byte 01000011 )
+
+
 
 

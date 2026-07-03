@@ -1,4 +1,35 @@
-[           
-add A 67 0b10000101 $67
+[         
+  
+// add B, 0b01000011 // evil binary code 
+// print B
+// add B, 67 
+// print B
+// sub B, 67 //subtraction modification 
+// sub B, 0b01000011 // more evil binary code
+// print B 
+// add B, 67 
+// print B
+// add B, 67 
+// print B
+// add B, 67 
+// print B
+// add B, 67 
+// print B
+// add B, 67 // overflow test 
+// print B //printing function 
+load C, 69
+
+
+print C
+store $12, 0b01000011
+print $12
+load A, $12
+print A
+add B, 67
+load A, B
+print B
+print $12
+sub B, 67
+jnz - 10
 
 ]
