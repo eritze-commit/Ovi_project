@@ -7,7 +7,7 @@ public struct Ovi
     {
     byte[] Memory = new byte[255];
     int cur_exec_line = 0;
-    bool zero_flag = false
+    bool zero_flag = false;
     
     
     bool running = false;
@@ -30,16 +30,16 @@ public struct Ovi
                         Console.WriteLine($"File Opened {filepath}");
                         try
                         {
-                            int ins_Line = 0;
-                            foreach (string line in data) 
-                            {
-                                string[] line_split = line.Split(' ');
-                        
-                                instructions[ins_Line] = new string[line_split.Length];
-                                int collum = 0;
-                              
-                                foreach (string word in line_split) 
-                                {
+                     int ins_Line = 0;
+                     foreach (string line in data) 
+                     {
+                         string[] line_split = line.Split(' ');
+                 
+                         instructions[ins_Line] = new string[line_split.Length];
+                         int collum = 0;
+                     
+                         foreach (string word in line_split) 
+                         {
                                   // if (word != "")
                                    //{
                                         instructions[ins_Line][collum] = word;
@@ -58,18 +58,19 @@ public struct Ovi
                         //Console.WriteLine($"[{string.Join(", ", instructions)}]");
                         var registers = new Dictionary<string,Byte> 
                         {
-                            ["A"] = 0,
+                            ["A"] = 67,
                             ["B"] = 0,
                             ["C"] = 0,
                             ["D"] = 0,
                         };
 
-                        byte Value_Parser(string value, params string[] flags)
+                        byte Value_Parser(string input , params string[] flags)
                         {
                             bool binary_byte = false;
                             bool register = false ;
                             bool number = false ;
-                            bool memory_adress ;
+                            bool memory_adress = false ;
+                            
                             foreach (string flag in flags )
                             {
                                 switch(flag)
@@ -83,22 +84,74 @@ public struct Ovi
                                     case "num":
                                         number = true;
                                         break;
-                                    case "mem" :
+                                    case "mem":
                                         memory_adress = true;
                                         break;
                                     
                                 }
-                            }
+                                
+                            };
                             try
                             {
-                                
+                                if ( registers.ContainsKey(input) )
+                                {
+                                    if (register == true)
+                                    {
+                                        return registers[input] ; 
+                                    } 
+                                    else
+                                    {
+                                       throw  new Exception("something went wrong ");
+                                    }
+                                }
+                                else if ( int.Parse(input) is int )
+                                {
+                                    if (number == true )
+                                    {
+                                        return unchecked((byte) int.Parse(input));
+                                    }
+                                    else
+                                    {
+                                        throw  new Exception("something went wrong ");
+                                    }
+                                }
+                                else if (input.StartsWith('$') )
+                                {
+                                    if (memory_adress == true)
+                                    {
+                                       // input = input.Replace("$","");
+                                        byte byte_input = unchecked((byte) int.Parse(input.Substring(1))) ;
+                                        return Memory[byte_input] ;
+                                    }
+                                    else
+                                    {
+                                        throw  new Exception("something went wrong ");
+                                    }
+                                }
+                                else if (input.StartsWith("0b"))
+                                {
+                                    if ( binary_byte == true  )
+                                    {
+                                    
+                                        byte byte_value = Convert.ToByte(input.Substring(2),2);
+                                        return byte_value;
+                                    }
+                                    else
+                                    {
+                                        throw  new Exception("something went wrong ");
+                                        
+                                    }
+                                }
+                            
                             }
                             catch
                             {
                                 Console.WriteLine($"\x1b[31mRUNTIME ERROR ! code failed on line {cur_exec_line + 1 }\x1b[0m");
                                 running = false;
+                                return 69;
                             }
-                        }
+                             return 69;
+                        };
                        
                        
                         Dictionary<string,Action> operations = new Dictionary<string,Action>()
@@ -108,13 +161,19 @@ public struct Ovi
                             {   
                                 try
                                 {    
-                                    if 
-                                    int left_value = int.Parse(instructions[cur_exec_line][1]);
-                                    int right_value = int.Parse(instructions[cur_exec_line][2]);
-                                    byte a = unchecked((byte)register);
-                                    byte b = unchecked((byte)right_value);
-                                    byte result = unchecked( (byte)( register + right_value) ) ;
-                                    Console.WriteLine($"Line {cur_exec_line + 1 }, ins exec, add : res - {result} ");
+                                    Console.WriteLine($" {Value_Parser(instructions[cur_exec_line][1],"reg")},  { Value_Parser(instructions[cur_exec_line][2],"num")}, {Value_Parser(instructions[cur_exec_line][3],"bin")},{ Value_Parser(instructions[cur_exec_line][4],"mem")}" );
+                                    
+                                    // Value_Parser(instructions[cur_exec_line][1],"reg");
+                                    // Value_Parser(instructions[cur_exec_line][2],"num");
+                                    // Value_Parser(instructions[cur_exec_line][3],"bin");
+                                    // Value_Parser(instructions[cur_exec_line][4],"mem");
+                                    
+                                    // int left_value = int.Parse(instructions[cur_exec_line][1]);
+                                    // int right_value = int.Parse(instructions[cur_exec_line][2]);
+                                    // byte a = unchecked((byte)left_value);
+                                    // byte b = unchecked((byte)right_value);
+                                    // byte result = unchecked( (byte)( left_value + right_value) ) ;
+                                    // Console.WriteLine($"Line {cur_exec_line + 1 }, ins exec, add : res - {result} ");
                                 }
                                 catch
                                 {

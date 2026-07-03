@@ -1,15 +1,4 @@
 [           
-add 1 2
-store A, 20
-add 15, 50
-store
-
-        
-
-        
-
-
-
-add 255 43
+add A 67 0b10000101 $67
 
 ]
