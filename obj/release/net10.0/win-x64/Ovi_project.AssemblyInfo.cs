@@ -11,9 +11,9 @@ using System;
 using System.Reflection;
 
 [assembly: System.Reflection.AssemblyCompanyAttribute("Ovi_project")]
-[assembly: System.Reflection.AssemblyConfigurationAttribute("release")]
+[assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+fc2069548a80761cbbf3844f59327207c998e364")]
 [assembly: System.Reflection.AssemblyProductAttribute("Ovi_project")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Ovi_project")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

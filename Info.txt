@@ -12,7 +12,33 @@ language
 add -   addision  (register name to add to), (constant or register 01000011)
 sub -  subtraction  (register name to subrtact to), (constant or register or Byte 01000011 )
 store - storing (memory adress  name to store  to), (constant or register or Byte 01000011 )
+load - (load to register from something )
+jnz - ( jump if not zero )
+jz - ( jump if zero )
+print (parameter )
+halt (stops program )
+
+example code 
+
+[
+load A, 67 
+jmp + 7
+print 0b00101000
+load B, $1  //load the stuff in the thing 
+add B, 67
+store $1, B
+print $1 
+add B, C
 
 
+add C, 1
+sub A, 1 
+jnz - 10
+
+halt
+
+
+
+]
 
 

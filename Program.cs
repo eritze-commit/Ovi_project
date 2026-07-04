@@ -183,7 +183,7 @@ public struct Ovi
                                     //Value_Parser(instructions[cur_exec_line][4],"mem");
                                     string register = instructions[cur_exec_line][1].Replace(",","");
                                     byte left_value =  Value_Parser(register,"reg");
-                                    byte right_value = Value_Parser(instructions[cur_exec_line][2],"num","bin");
+                                    byte right_value = Value_Parser(instructions[cur_exec_line][2],"num","bin","reg");
                                     //byte a = unchecked((byte)left_value);
                                    // byte b = unchecked((byte)right_value);
                                     byte result = unchecked( (byte)( left_value + right_value) ) ;
@@ -306,11 +306,11 @@ public struct Ovi
                                     byte right_value = Value_Parser(instructions[cur_exec_line][2],"num","bin","reg");
                                     if (jmp_operator == "+" ) 
                                     {
-                                        cur_exec_line += right_value  ; 
+                                        cur_exec_line += right_value + 1  ; 
                                     }
                                     else if (jmp_operator == "-" ) 
                                     {
-                                         cur_exec_line -= right_value ; 
+                                         cur_exec_line -= right_value + 1  ; 
                                     }
                                     else
                                     {
@@ -340,11 +340,11 @@ public struct Ovi
                                         byte right_value = Value_Parser(instructions[cur_exec_line][2],"num","bin","reg");
                                         if (jmp_operator == "+" ) 
                                         {
-                                            cur_exec_line += right_value  ; 
+                                            cur_exec_line += right_value  + 1 ; 
                                         }
                                         else if (jmp_operator == "-" ) 
                                         {
-                                            cur_exec_line -= right_value ; 
+                                            cur_exec_line -= right_value  + 1 ; 
                                         }
                                         else
                                         {
@@ -376,11 +376,11 @@ public struct Ovi
                                         byte right_value = Value_Parser(instructions[cur_exec_line][2],"num","bin","reg");
                                         if (jmp_operator == "+" ) 
                                         {
-                                            cur_exec_line += right_value  ; 
+                                            cur_exec_line += right_value  + 1 ; 
                                         }
                                         else if (jmp_operator == "-" ) 
                                         {
-                                            cur_exec_line -= right_value ; 
+                                            cur_exec_line -= right_value + 1 ; 
                                             
                                         }
                                         else

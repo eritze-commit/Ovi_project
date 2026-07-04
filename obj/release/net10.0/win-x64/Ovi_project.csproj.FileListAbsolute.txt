@@ -199,3 +199,4 @@ C:\Users\emilis\AppData\Local\Programs\Lite XL\C_sharp\test_projects\Ovi_project
 C:\Users\emilis\AppData\Local\Programs\Lite XL\C_sharp\test_projects\Ovi_project\obj\release\net10.0\win-x64\Ovi_project.pdb
 C:\Users\emilis\AppData\Local\Programs\Lite XL\C_sharp\test_projects\Ovi_project\obj\release\net10.0\win-x64\Ovi_project.genruntimeconfig.cache
 C:\Users\emilis\AppData\Local\Programs\Lite XL\C_sharp\test_projects\Ovi_project\obj\release\net10.0\win-x64\ref\Ovi_project.dll
+C:\Users\emilis\AppData\Local\Programs\Lite XL\C_sharp\test_projects\Ovi_project\obj\Release\net10.0\win-x64\Ovi_project.sourcelink.json

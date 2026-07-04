@@ -1,5 +1,5 @@
-obj\release\net10.0\win-x64\Ovi_project.dll
--o:obj\release\net10.0\win-x64\native\Ovi_project.obj
+obj\Release\net10.0\win-x64\Ovi_project.dll
+-o:obj\Release\net10.0\win-x64\native\Ovi_project.obj
 -r:C:\Users\emilis\.nuget\packages\microsoft.netcore.app.runtime.nativeaot.win-x64\10.0.9\runtimes\win-x64\lib\net10.0\Microsoft.CSharp.dll
 -r:C:\Users\emilis\.nuget\packages\microsoft.netcore.app.runtime.nativeaot.win-x64\10.0.9\runtimes\win-x64\lib\net10.0\Microsoft.VisualBasic.Core.dll
 -r:C:\Users\emilis\.nuget\packages\microsoft.netcore.app.runtime.nativeaot.win-x64\10.0.9\runtimes\win-x64\lib\net10.0\Microsoft.VisualBasic.dll
@@ -181,8 +181,8 @@ obj\release\net10.0\win-x64\Ovi_project.dll
 --targetarch:x64
 -O
 -g
---sourcelink:obj\release\net10.0\win-x64\native\Ovi_project.sourcelink
---exportsfile:obj\release\net10.0\win-x64\native\Ovi_project.def
+--sourcelink:obj\Release\net10.0\win-x64\native\Ovi_project.sourcelink
+--exportsfile:obj\Release\net10.0\win-x64\native\Ovi_project.def
 --export-dynamic-symbol:DotNetRuntimeDebugHeader,DATA
 --initassembly:System.Private.CoreLib
 --initassembly:System.Private.StackTraceMetadata
