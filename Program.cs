@@ -6,8 +6,10 @@ public struct Ovi
    
     {
     byte[] Memory = new byte[256];
-    byte[] Stack = new byte[10];
-    int cur_exec_line = 0;
+    byte[] Special_memory = new byte[256];
+    byte[] Stack = new byte[25];
+    int  cur_exec_line = 0;
+    byte stack_pointer = 0;
     bool zero_flag = false;
     bool silent = false;
     
@@ -74,12 +76,13 @@ public struct Ovi
                             ["D"] = 0,
                         };
 
-                        byte Value_Parser(string input , params string[] flags)
+                        (byte val, byte opt) Value_Parser(string input , params string[] flags)
                         {
                             bool binary_byte = false;
                             bool register = false ;
                             bool number = false ;
                             bool memory_adress = false ;
+                            bool special_mem = false ;
                             
                             foreach (string flag in flags )
                             {
@@ -97,7 +100,10 @@ public struct Ovi
                                     case "mem":
                                         memory_adress = true;
                                         break;
-                                    
+                                    case "smm" :
+                                        special_mem = true;
+                                        break;
+                                     
                                 }
                                 
                             };
@@ -107,7 +113,7 @@ public struct Ovi
                                 {
                                     if (register == true)
                                     {
-                                        return registers[input] ; 
+                                        return (registers[input],0) ; 
                                     } 
                                     else
                                     {
@@ -120,8 +126,9 @@ public struct Ovi
                                     if (memory_adress == true)
                                     {
                                        // input = input.Replace("$","");
-                                        byte byte_input = unchecked((byte) int.Parse(input.Substring(1))) ;
-                                        return Memory[byte_input] ;
+                                        byte byte_value = Value_Parser(input.Substring(1),"num","reg","bin").val;
+                                       // byte byte_input = unchecked((byte) int.Parse(input.Substring(1))) ;
+                                        return (Memory[byte_value],byte_value) ;
                                     }
                                     else
                                     {
@@ -135,7 +142,7 @@ public struct Ovi
                                     {
                                         
                                         byte byte_value = Convert.ToByte(input.Substring(2),2);
-                                        return byte_value;
+                                        return (byte_value,0);
                                     }
                                     else
                                     {
@@ -147,7 +154,7 @@ public struct Ovi
                                 {
                                     if (number == true )
                                     {
-                                        return unchecked((byte) int.Parse(input));
+                                        return (unchecked((byte) int.Parse(input)),0);
                                     }
                                     else
                                     {
@@ -161,10 +168,10 @@ public struct Ovi
                                 Console.WriteLine($"\x1b[32m{input}\x1b[0m");
                                 Console.WriteLine($"\x1b[31mRUNTIME ERROR ! code failed on line {cur_exec_line + 1 }\x1b[0m");
                                 running = false;
-                                return 67;
+                                return (67,67);
                                
                             }
-                             return 67;
+                             return (67,67);
                         };
                        
                        
@@ -182,8 +189,8 @@ public struct Ovi
                                     //Value_Parser(instructions[cur_exec_line][3],"bin");
                                     //Value_Parser(instructions[cur_exec_line][4],"mem");
                                     string register = instructions[cur_exec_line][1].Replace(",","");
-                                    byte left_value =  Value_Parser(register,"reg");
-                                    byte right_value = Value_Parser(instructions[cur_exec_line][2],"num","bin","reg");
+                                    byte left_value =  Value_Parser(register,"reg").val;
+                                    byte right_value = Value_Parser(instructions[cur_exec_line][2],"num","bin","reg").val;
                                     //byte a = unchecked((byte)left_value);
                                    // byte b = unchecked((byte)right_value);
                                     byte result = unchecked( (byte)( left_value + right_value) ) ;
@@ -214,8 +221,8 @@ public struct Ovi
                                 try
                                 {    
                                     string register = instructions[cur_exec_line][1].Replace(",","");
-                                    byte left_value =  Value_Parser(register,"reg");
-                                    byte right_value = Value_Parser(instructions[cur_exec_line][2],"num","bin");
+                                    byte left_value =  Value_Parser(register,"reg").val;
+                                    byte right_value = Value_Parser(instructions[cur_exec_line][2],"num","bin","reg").val;
                                     byte result = unchecked( (byte)( left_value - right_value) ) ;
                                     registers[register] = result;
 
@@ -242,7 +249,7 @@ public struct Ovi
                              {
                                 try
                                 {
-                                    byte result = Value_Parser(instructions[cur_exec_line][1],"num","bin","mem","reg");
+                                    byte result = Value_Parser(instructions[cur_exec_line][1],"num","bin","mem","reg").val;
                                     Console.WriteLine($"{result}");
                                      if (!silent )
                                     {
@@ -261,9 +268,10 @@ public struct Ovi
                                 try
                                 {    
                                     string memory = instructions[cur_exec_line][1].Replace(",","");
-                                    byte left_value =  Value_Parser(memory,"mem");
-                                    byte right_value = Value_Parser(instructions[cur_exec_line][2],"num","bin","reg");
-                                    byte memory_adress = unchecked((byte) int.Parse(memory.Substring(1))) ;
+                                    byte left_value =  Value_Parser(memory,"mem").val;
+                                    byte right_value = Value_Parser(instructions[cur_exec_line][2],"num","bin","reg").val;
+                                    //byte memory_adress = unchecked((byte) int.Parse(memory.Substring(1))) ;
+                                    byte memory_adress =  Value_Parser(memory,"mem").opt;
                                     Memory[memory_adress] = right_value;
 
                                      if (!silent )
@@ -282,8 +290,8 @@ public struct Ovi
                                 try
                                 {    
                                     string reg = instructions[cur_exec_line][1].Replace(",","");
-                                    byte left_value =  Value_Parser(reg,"reg");
-                                    byte right_value = Value_Parser(instructions[cur_exec_line][2],"num","bin","reg","mem");
+                                    byte left_value =  Value_Parser(reg,"reg").val;
+                                    byte right_value = Value_Parser(instructions[cur_exec_line][2],"num","bin","reg","mem").val;
                                     registers[reg] = right_value;
 
                                      if (!silent )
@@ -303,12 +311,13 @@ public struct Ovi
                                 {    
                                     int old_exec_line = cur_exec_line;
                                     string jmp_operator = instructions[cur_exec_line][1];
-                                    byte right_value = Value_Parser(instructions[cur_exec_line][2],"num","bin","reg");
-                                    if (jmp_operator == "+" ) 
+                                    byte right_value = Value_Parser(instructions[cur_exec_line][1].Substring(1),"num","bin","reg").val;
+
+                                    if (jmp_operator.StartsWith("+")) 
                                     {
-                                        cur_exec_line += right_value + 1  ; 
+                                        cur_exec_line += right_value - 1   ; 
                                     }
-                                    else if (jmp_operator == "-" ) 
+                                    else if (jmp_operator.StartsWith("-")) 
                                     {
                                          cur_exec_line -= right_value + 1  ; 
                                     }
@@ -319,7 +328,7 @@ public struct Ovi
                                    
                                      if (!silent )
                                     {
-                                        Console.WriteLine($"Line {old_exec_line + 1 }, ins exec, jmp : jump to line - {cur_exec_line+1}");
+                                        Console.WriteLine($"Line {old_exec_line + 1 },value {right_value}, ins exec, jmp : jump to line - {cur_exec_line + 2}");
                                     }
                                 }
                                 catch
@@ -335,26 +344,26 @@ public struct Ovi
                                     int old_exec_line = cur_exec_line;
                                     if (zero_flag) 
                                     {
-                                        
+                                            
                                         string jmp_operator = instructions[cur_exec_line][1];
-                                        byte right_value = Value_Parser(instructions[cur_exec_line][2],"num","bin","reg");
-                                        if (jmp_operator == "+" ) 
+                                        byte right_value = Value_Parser(instructions[cur_exec_line][1].Substring(1),"num","bin","reg").val;
+                                        if (jmp_operator.StartsWith("+")) 
                                         {
-                                            cur_exec_line += right_value  + 1 ; 
+                                            cur_exec_line += right_value - 1     ; 
                                         }
-                                        else if (jmp_operator == "-" ) 
+                                        else if (jmp_operator.StartsWith("-")) 
                                         {
-                                            cur_exec_line -= right_value  + 1 ; 
+                                            cur_exec_line -= right_value + 1  ; 
                                         }
                                         else
                                         {
                                             throw new Exception("Wrong stuff ");
                                         }
-                                    
+                                        
                                     }
                                     if (!silent )
                                         {
-                                            Console.WriteLine($"Line {old_exec_line + 1 }, ins exec, jz : jump if zero - {cur_exec_line+1}");
+                                            Console.WriteLine($"Line {old_exec_line + 1 }, ins exec, jz : jump if zero - {cur_exec_line + 2}");
                                         }
                                 }
                                 catch
@@ -373,15 +382,14 @@ public struct Ovi
                                     {
                                         
                                         string jmp_operator = instructions[cur_exec_line][1];
-                                        byte right_value = Value_Parser(instructions[cur_exec_line][2],"num","bin","reg");
-                                        if (jmp_operator == "+" ) 
+                                        byte right_value = Value_Parser(instructions[cur_exec_line][1].Substring(1),"num","bin","reg").val;
+                                        if (jmp_operator.StartsWith("+")) 
                                         {
-                                            cur_exec_line += right_value  + 1 ; 
+                                            cur_exec_line += right_value - 1     ; 
                                         }
-                                        else if (jmp_operator == "-" ) 
+                                        else if (jmp_operator.StartsWith("-")) 
                                         {
-                                            cur_exec_line -= right_value + 1 ; 
-                                            
+                                            cur_exec_line -= right_value + 1  ; 
                                         }
                                         else
                                         {
@@ -391,7 +399,7 @@ public struct Ovi
                                     }
                                     if (!silent )
                                         {
-                                            Console.WriteLine($"Line {old_exec_line + 1 }, ins exec, jnz : jump if not zero - {cur_exec_line+1}");
+                                            Console.WriteLine($"Line {old_exec_line + 1 }, ins exec, jnz : jump if not zero - {cur_exec_line + 2 }");
                                         }
                                 }
                                 catch

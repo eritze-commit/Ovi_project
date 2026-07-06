@@ -1,44 +1,70 @@
-asmebly like language with virtual memory , 
+asmebly like language virual cpu like , interpereter , 
 written in C# , file extensoion .ovi
 Ovi abreviation for Operator of Virtual Instructions
 
-255 bytes of memory 
+256 bytes of memory 
+256 bytes of special memory 
 4 general purpose registers 1 byte each , A , B , C , D , 
 0 flag 
 
 language 
 
+Instructions 
 
 add -   addision  (register name to add to), (constant or register 01000011)
 sub -  subtraction  (register name to subrtact to), (constant or register or Byte 01000011 )
 store - storing (memory adress  name to store  to), (constant or register or Byte 01000011 )
 load - (load to register from something )
-jnz - ( jump if not zero )
+jnz - ( jump if not zero ) if add or sub result == 0 flag flips if not the flag flips to false 
 jz - ( jump if zero )
-print (parameter )
-halt (stops program )
+jmp - (unconditional jump) +/-(constant or register or Byte b01000011)
+print - (parameter )
+halt - (stops program )
+ 
+
+Values 
+
+67 , numberal 6 byte  number 
+0b01000011 , bynary byte literal prefixed 0b 
+A , B , C , D - 4 general purpose registers 
+$67 , Memory adress prefixed $
+#67 , Special memory adresses 
+
+Special adresses 
+
 
 example code 
 
 [
-load A, 67 
-jmp + 7
-print 0b00101000
-load B, $1  //load the stuff in the thing 
-add B, 67
-store $1, B
-print $1 
-add B, C
 
+load A, 5 // setting registers 
+load B, 5
 
-add C, 1
-sub A, 1 
-jnz - 10
+add C, A // multiplication 
+sub B, 1
+jnz -2
 
-halt
+store $1, C
 
+load A, 30 // setting registers 
+load B, 3
+load C, 0
 
+add C, B // division 
+add D, 1 
+sub A, B
+jnz -3
+
+store $2, D
+
+print $1
+print $2
 
 ]
+
+maybe ?
+
+jsr - (jump to subroutine saves the return line on the stack ) +/-(constant or register or Byte b01000011)
+ret - returns to the adress of the top adress pointer adress line of the stack 
 
 

@@ -1,0 +1,26 @@
+[
+load B, 10
+print B
+sub B, 1
+jnz -2
+
+halt 
+
+add A, 10 
+print A
+add A, A 
+print A
+add A, 0b01000011
+print A
+
+load C, 
+
+
+
+load B, 10
+store $11, 10
+store $C, 67
+load A, $B
+print A
+
+]
