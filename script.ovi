@@ -1,26 +1,78 @@
 [
+sleep 10
+jmp +51
 
-load A, $3 // setting registers 
-load B, 5
+load A, $0b0001000 // setting registers 
+load C, 0
+load B, $0b0000111
 
 add C, A // multiplication 
-sub B, 1
-jnz -2
+sub B, 0b0000001
+jnz -0b0000010
 
-store $1, C
 
-load A, 30 // setting registers 
-load B, 3
-load C, 0
-
-add C, B // division 
+store $6, C
+load D, 0
 add D, 1 
+jmp +12 // jump back
+
+//square root func 
+load A, $11 //setting the register //constant input
+load B, $10
+load D, 25 //jump adress of multiplication 
+
+add B, 1
+store $10, B 
+store $0b0001000, B
+store $0b0000111, B
+jmp -23    // jump to multiplication 
+load A, $11 //setting the register 
+load B, $10
+load D, 12
+load C, $6
+sub A, C
+jcn +2
+jnz -15
+
+jmp +19
+load A, $13 // setting registers 
+load B, $14
+load D, 0
+
+// // division
+add D, 0b0000001 
 sub A, B
-jnz -3
+jcn +23 // jump conditional  
+jnz -0b0000100 // jump if not 0 
+jmp +4
+store $12, D
+jmp +5
 
-store $2, D
+print 1
+halt
 
-print $1
-print $2
+store $11, 251 // input number into the machine 
+jmp -36
+// prime func 
+print $10  //$10 = root of number 
+load A, $10
+load B, $11
+load C, 0
+sub A, 1
+jz +13
+add A, 1
+store $13, B
+store $14, A
+store $10, A
+jmp -29
+load A, $10
+load B, $11
+load C, 0
+sub A, 1
+store $10, A
+jnz -13
 
+
+
+print 0
 ]

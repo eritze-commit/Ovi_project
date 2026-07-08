@@ -1,10 +1,22 @@
 [
-load B, 10
-print B
-sub B, 1
-jnz -2
+load A, 1
+add A, 1 
+print A
 
 halt 
+
+sleep 0
+
+load B, 8
+print 10
+print 9
+print 8
+print 7
+print 6
+print 5
+sub B, 1
+jnz -B
+
 
 add A, 10 
 print A
@@ -13,12 +25,10 @@ print A
 add A, 0b01000011
 print A
 
-load C, 
-
-
+load C, 11
 
 load B, 10
-store $11, 10
+store $0b0001011, 10
 store $C, 67
 load A, $B
 print A

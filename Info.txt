@@ -6,6 +6,7 @@ Ovi abreviation for Operator of Virtual Instructions
 256 bytes of special memory 
 4 general purpose registers 1 byte each , A , B , C , D , 
 0 flag 
+underflow  flag , 
 
 language 
 
@@ -17,9 +18,11 @@ store - storing (memory adress  name to store  to), (constant or register or Byt
 load - (load to register from something )
 jnz - ( jump if not zero ) if add or sub result == 0 flag flips if not the flag flips to false 
 jz - ( jump if zero )
+jcn - (when a  value overflows or underflows )
 jmp - (unconditional jump) +/-(constant or register or Byte b01000011)
 print - (parameter )
 halt - (stops program )
+
  
 
 Values 

@@ -5,28 +5,55 @@ public struct Ovi
     static void Main(string[] arguments) 
    
     {
+   
     byte[] Memory = new byte[256];
-    byte[] Special_memory = new byte[256];
-    byte[] Stack = new byte[25];
+   // byte[] Special_memory = new byte[256];
+    //byte[] Stack = new byte[25];
     int  cur_exec_line = 0;
-    byte stack_pointer = 0;
+    //byte stack_pointer = 0;
     bool zero_flag = false;
+    bool cond_flag = false;
     bool silent = false;
+    bool visual = false;
+    byte speed = 50;
+       
+    int cursorY = 0;
+    int viewportY = 0;
+
+    int screenHeight = Console.WindowHeight;
     
     
     bool running = false;
     bool entered_main = false;
-        
+        if (arguments.Length == 1 ) 
+        {
+            if (arguments[0].Contains("-help") )
+            {
+                Console.WriteLine("______________________________________________________________\nWelcome to OVI\n./excecutable (path to file with .ovi extension)\nOptional falgs\n -s = silent flag only print output\n -viz = visual code representation");
+            }
+        } 
         if (arguments.Length >= 1 ) 
         {    
             if (arguments.Length >= 2)
             {
-                if (arguments[1].Contains("-s") )
+                if (arguments[1]  == "-s" )
                     {
                         silent = true;
                         
                     }
+                else if (arguments[1]  == "-viz" )
+                {
+                    visual = true;
+                    silent = true;
+                    
+                }
             }
+            if (arguments.Length  ==  0)
+            {
+                Console.WriteLine("Welcome to OVI/n/./excecutable (path to file with .ovi extension)\nOptional falgs\n -s = silent flag only print output\n -viz = visual code representation");
+            }
+            
+             Console.Write("\x1b[2J\x1b[H");
             for (int i = 0; i < 1; i++)
             {   
                 
@@ -56,11 +83,18 @@ public struct Ovi
                                    //{
                                         instructions[ins_Line][collum] = word;
                                    // }
-                                   // Console.WriteLine($"{instructions[ins_Line][collum]}");
+                                   if (visual)
+                                   {
+                                        Console.Write($"{instructions[ins_Line][collum]}");
+                                   }
                                     //Console.WriteLine($"{word}");
                                     collum += 1 ;
                                 }
                                 ins_Line += 1;
+                                if (visual)
+                                {
+                                    Console.Write($"\n");
+                                }
                             }
                         }
                         catch (Exception ex)
@@ -68,6 +102,10 @@ public struct Ovi
                              Console.WriteLine($"\x1b[31mFailed to parse the file\x1b[0m {ex}");
                         }
                         //Console.WriteLine($"[{string.Join(", ", instructions)}]");
+                        if (visual)
+                        {
+                            Console.WriteLine("______________________________________________________________\n");
+                        }
                         var registers = new Dictionary<string,Byte> 
                         {
                             ["A"] = 0,
@@ -75,7 +113,7 @@ public struct Ovi
                             ["C"] = 0,
                             ["D"] = 0,
                         };
-
+                       
                         (byte val, byte opt) Value_Parser(string input , params string[] flags)
                         {
                             bool binary_byte = false;
@@ -193,8 +231,9 @@ public struct Ovi
                                     byte right_value = Value_Parser(instructions[cur_exec_line][2],"num","bin","reg").val;
                                     //byte a = unchecked((byte)left_value);
                                    // byte b = unchecked((byte)right_value);
-                                    byte result = unchecked( (byte)( left_value + right_value) ) ;
-                                    registers[register] = result;
+                                    int result = left_value + right_value;
+                                    byte Byte_result = unchecked( (byte)result) ;
+                                    registers[register] = Byte_result;
                                     
                                     if (result == 0) 
                                     {
@@ -204,10 +243,18 @@ public struct Ovi
                                     {
                                          zero_flag = false;
                                     }
+                                    if (result > 255 )
+                                    {
+                                        cond_flag = true;
+                                    }
+                                    else
+                                    {
+                                        cond_flag = false;
+                                    }
 
                                       if (!silent )
                                     {
-                                        Console.WriteLine($"Line {cur_exec_line + 1 }, ins exec, add : res - {result} ");
+                                        Console.WriteLine($"Line {cur_exec_line + 1 }, ins exec, add : res - {Byte_result} ");
                                     }
                                 }
                                 catch
@@ -223,12 +270,13 @@ public struct Ovi
                                     string register = instructions[cur_exec_line][1].Replace(",","");
                                     byte left_value =  Value_Parser(register,"reg").val;
                                     byte right_value = Value_Parser(instructions[cur_exec_line][2],"num","bin","reg").val;
-                                    byte result = unchecked( (byte)( left_value - right_value) ) ;
-                                    registers[register] = result;
+                                    int result = left_value - right_value;
+                                    byte byte_result = unchecked( (byte) result ) ;
+                                    registers[register] = byte_result;
 
                                      if (!silent )
                                     {
-                                        Console.WriteLine($"Line {cur_exec_line + 1 }, ins exec, sub : res - {result} ");
+                                        Console.WriteLine($"Line {cur_exec_line + 1 }, ins exec, sub : res - {byte_result} ");
                                     }
                                     if (result == 0) 
                                     {
@@ -237,6 +285,14 @@ public struct Ovi
                                     else
                                     {
                                          zero_flag = false;
+                                    }
+                                    if (result < 0 )
+                                    {
+                                        cond_flag = true;
+                                    }
+                                    else
+                                    {
+                                        cond_flag = false;
                                     }
                                 }
                                 catch
@@ -363,7 +419,7 @@ public struct Ovi
                                     }
                                     if (!silent )
                                         {
-                                            Console.WriteLine($"Line {old_exec_line + 1 }, ins exec, jz : jump if zero - {cur_exec_line + 2}");
+                                            Console.WriteLine($"Line {old_exec_line + 1 }, ins exec, jz : jump if zero = {zero_flag} - {cur_exec_line + 2}");
                                         }
                                 }
                                 catch
@@ -372,6 +428,42 @@ public struct Ovi
                                     running = false;
                                 }
                              },
+                             ["jcn"] = () =>
+                             {
+                                try
+                                {
+                                    int old_exec_line = cur_exec_line;
+                                    if (cond_flag) 
+                                    {
+                                            
+                                        string jmp_operator = instructions[cur_exec_line][1];
+                                        byte right_value = Value_Parser(instructions[cur_exec_line][1].Substring(1),"num","bin","reg").val;
+                                        if (jmp_operator.StartsWith("+")) 
+                                        {
+                                            cur_exec_line += right_value - 1     ; 
+                                        }
+                                        else if (jmp_operator.StartsWith("-")) 
+                                        {
+                                            cur_exec_line -= right_value + 1  ; 
+                                        }
+                                        else
+                                        {
+                                            throw new Exception("Wrong stuff ");
+                                        }
+                                        
+                                    }
+                                    if (!silent )
+                                        {
+                                            Console.WriteLine($"Line {old_exec_line + 1 }, ins exec, jcn : jump conditional = {cond_flag} - {cur_exec_line + 2}");
+                                        }
+                                }
+                                catch
+                                {
+                                    Console.WriteLine($"\x1b[31mRUNTIME ERROR ! code failed on line {cur_exec_line + 1 }\x1b[0m");
+                                    running = false;
+                                }
+                             },
+                             
                              ["jnz"] = () =>
                              {
                                 try
@@ -399,7 +491,7 @@ public struct Ovi
                                     }
                                     if (!silent )
                                         {
-                                            Console.WriteLine($"Line {old_exec_line + 1 }, ins exec, jnz : jump if not zero - {cur_exec_line + 2 }");
+                                            Console.WriteLine($"Line {old_exec_line + 1 }, ins exec, jnz : zero_flag = {zero_flag}, jump if not zero - {cur_exec_line + 2 }");
                                         }
                                 }
                                 catch
@@ -416,6 +508,15 @@ public struct Ovi
                                 }
                                 entered_main = false;
                                 running = false;
+                             },
+                             ["sleep"] = () => 
+                             {
+                                byte right_value = Value_Parser(instructions[cur_exec_line][1],"num","bin","reg").val;
+                                speed = right_value;
+                                if (!silent )
+                                {
+                                    Console.WriteLine($"Line {cur_exec_line + 1}, ins exec, sleep :{speed}ms");
+                                }
                              },
                              ["["] = () =>
                              {
@@ -441,7 +542,7 @@ public struct Ovi
                             
                         };
         
-
+ 
                         running = true;
                         void Runtime() 
                         {
@@ -463,6 +564,15 @@ public struct Ovi
                                             Console.WriteLine($"exec, line  {cur_exec_line + 1}");
                                         }
                                     }
+                                    if (visual)
+                                    {
+                       
+                                       Console.Write($"\x1b[{cur_exec_line+3};1H") ;
+                                        //Console.SetCursorPosition(0, cur_exec_line);
+                                        //Console.Write($"\x1b[1A");
+                                        
+                                    }
+                                   
                                     
                                     if (cur_exec_line < instructions.Length  )
                                     {
@@ -475,7 +585,7 @@ public struct Ovi
                                         running = false;
                                     
                                     }
-                                    Thread.Sleep(50);
+                                     Thread.Sleep(speed);
                                     
                                 }
                                 catch
@@ -499,6 +609,8 @@ public struct Ovi
                     catch
                     {
                         Console.WriteLine("\x1b[31mFailed to open the file\x1b[0m");
+                                        Console.WriteLine("______________________________________________________________\nWelcome to OVI\n./excecutable (path to file with .ovi extension)\nOptional falgs\n -s = silent flag only print output\n -viz = visual code representation");
+
                     }
                     
                    
@@ -506,12 +618,16 @@ public struct Ovi
                 else
                 {
                     Console.WriteLine("\x1b[31mWrong File type \x1b[0m");
+                                    Console.WriteLine("______________________________________________________________\nWelcome to OVI\n./excecutable (path to file with .ovi extension)\nOptional falgs\n -s = silent flag only print output\n -viz = visual code representation");
+
                 }
             }
         }
         else
         {
             Console.WriteLine($"\x1b[31mFalse arguments\x1b[0m,\nArgumet number : {arguments.Length}");
+                            Console.WriteLine("______________________________________________________________\nWelcome to OVI\n./excecutable (path to file with .ovi extension)\nOptional falgs\n -s = silent flag only print output\n -viz = visual code representation");
+
         }
         
     
