@@ -2,12 +2,6 @@
   "version": 4,
   "targets": {
     "net10.0": {
-      "Microsoft.DotNet.ILCompiler/10.0.9": {
-        "type": "package",
-        "build": {
-          "build/Microsoft.DotNet.ILCompiler.props": {}
-        }
-      },
       "Microsoft.NET.ILLink.Tasks/10.0.9": {
         "type": "package",
         "build": {
@@ -15,56 +9,16 @@
         }
       }
     },
-    "net10.0/win-x64": {
-      "Microsoft.DotNet.ILCompiler/10.0.9": {
-        "type": "package",
-        "dependencies": {
-          "runtime.win-x64.Microsoft.DotNet.ILCompiler": "10.0.9"
-        },
-        "build": {
-          "build/Microsoft.DotNet.ILCompiler.props": {}
-        }
-      },
+    "net10.0/linux-arm64": {
       "Microsoft.NET.ILLink.Tasks/10.0.9": {
         "type": "package",
         "build": {
           "build/Microsoft.NET.ILLink.Tasks.props": {}
         }
-      },
-      "runtime.win-x64.Microsoft.DotNet.ILCompiler/10.0.9": {
-        "type": "package"
       }
     }
   },
   "libraries": {
-    "Microsoft.DotNet.ILCompiler/10.0.9": {
-      "sha512": "4y+VsQOcs4EiTSINdCpCWi/aLRbIbGTxSezQXd8uGVhzbDRm1FNVTZDyCUQixE0+g9UFusvfxVcF68YYz7RzxA==",
-      "type": "package",
-      "path": "microsoft.dotnet.ilcompiler/10.0.9",
-      "hasTools": true,
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "Icon.png",
-        "THIRD-PARTY-NOTICES.TXT",
-        "build/BuildFrameworkNativeObjects.proj",
-        "build/Microsoft.DotNet.ILCompiler.SingleEntry.targets",
-        "build/Microsoft.DotNet.ILCompiler.props",
-        "build/Microsoft.NETCore.Native.Publish.targets",
-        "build/Microsoft.NETCore.Native.Unix.targets",
-        "build/Microsoft.NETCore.Native.Windows.targets",
-        "build/Microsoft.NETCore.Native.targets",
-        "build/NativeAOT.natstepfilter",
-        "build/NativeAOT.natvis",
-        "build/WindowsAPIs.txt",
-        "build/findvcvarsall.bat",
-        "microsoft.dotnet.ilcompiler.10.0.9.nupkg.sha512",
-        "microsoft.dotnet.ilcompiler.nuspec",
-        "runtime.json",
-        "tools/netstandard/ILCompiler.Build.Tasks.deps.json",
-        "tools/netstandard/ILCompiler.Build.Tasks.dll"
-      ]
-    },
     "Microsoft.NET.ILLink.Tasks/10.0.9": {
       "sha512": "4Iw41e2h7I4t70SJcX2GCmbyKJIlA273Cfm9RJMM050/3VBejGAG1KcthP5Z2L6SQcbfbf6BhNWO26+ZG+GzMg==",
       "type": "package",
@@ -114,32 +68,10 @@
         "tools/netframework/build/Microsoft.NET.ILLink.targets",
         "useSharedDesignerContext.txt"
       ]
-    },
-    "runtime.win-x64.Microsoft.DotNet.ILCompiler/10.0.9": {
-      "sha512": "UEY5D3CvpctP5tcewYlnFS8JNReAEFTfAs//ZN733Oq9BXbTSZBCmBWnCs8JKgduHHa3u4oJ9ehfrZzV1xOFNA==",
-      "type": "package",
-      "path": "runtime.win-x64.microsoft.dotnet.ilcompiler/10.0.9",
-      "hasTools": true,
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "Icon.png",
-        "THIRD-PARTY-NOTICES.TXT",
-        "runtime.win-x64.microsoft.dotnet.ilcompiler.10.0.9.nupkg.sha512",
-        "runtime.win-x64.microsoft.dotnet.ilcompiler.nuspec",
-        "tools/clrjit_universal_arm64_x64.dll",
-        "tools/clrjit_universal_arm_x64.dll",
-        "tools/clrjit_unix_x64_x64.dll",
-        "tools/clrjit_win_x64_x64.dll",
-        "tools/clrjit_win_x86_x64.dll",
-        "tools/ilc.exe",
-        "tools/jitinterface_x64.dll"
-      ]
     }
   },
   "projectFileDependencyGroups": {
     "net10.0": [
-      "Microsoft.DotNet.ILCompiler >= 10.0.9",
       "Microsoft.NET.ILLink.Tasks >= 10.0.9"
     ]
   },
@@ -188,12 +120,6 @@
         "framework": "net10.0",
         "targetAlias": "net10.0",
         "dependencies": {
-          "Microsoft.DotNet.ILCompiler": {
-            "suppressParent": "All",
-            "target": "Package",
-            "version": "[10.0.9, )",
-            "autoReferenced": true
-          },
           "Microsoft.NET.ILLink.Tasks": {
             "suppressParent": "All",
             "target": "Package",
@@ -214,23 +140,15 @@
         "warn": true,
         "downloadDependencies": [
           {
-            "name": "Microsoft.AspNetCore.App.Runtime.win-x64",
+            "name": "Microsoft.AspNetCore.App.Runtime.linux-arm64",
             "version": "[10.0.9, 10.0.9]"
           },
           {
-            "name": "Microsoft.NETCore.App.Runtime.NativeAOT.win-x64",
+            "name": "Microsoft.NETCore.App.Host.linux-arm64",
             "version": "[10.0.9, 10.0.9]"
           },
           {
-            "name": "Microsoft.NETCore.App.Runtime.win-x64",
-            "version": "[10.0.9, 10.0.9]"
-          },
-          {
-            "name": "Microsoft.WindowsDesktop.App.Runtime.win-x64",
-            "version": "[10.0.9, 10.0.9]"
-          },
-          {
-            "name": "runtime.win-x64.Microsoft.DotNet.ILCompiler",
+            "name": "Microsoft.NETCore.App.Runtime.linux-arm64",
             "version": "[10.0.9, 10.0.9]"
           }
         ],
@@ -517,7 +435,7 @@
       }
     },
     "runtimes": {
-      "win-x64": {
+      "linux-arm64": {
         "#import": []
       }
     }

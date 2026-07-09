@@ -1,5 +1,5 @@
 [
-sleep 10
+sleep 100
 jmp +51
 
 load A, $0b0001000 // setting registers 
@@ -51,7 +51,7 @@ jmp +5
 print 1
 halt
 
-store $11, 251 // input number into the machine 
+store $11, 211 // input number into the machine 
 jmp -36
 // prime func 
 print $10  //$10 = root of number 
